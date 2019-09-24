@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Property">
+	<insert id="add" parameterType="Property">
+		insert into Property(cid,name) values(#{cid},#{name})
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			select last_insert_id() as id
+		</selectKey>
+	</insert>
+	<delete id="deleteById">
+		delete from Property where id=#{id}
+	</delete>
+	<update id="update" parameterType="Property">
+		update Property
+		<trim prefix="set" suffixOverrides=",">
+		<if test="cid!=null and cid!=''">
+				cid=#{cid},
+			</if>
+			<if test="name!=null and name!=''">
+				name=#{name},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+	<select id="queryById" resultType="Property">
+		select * from Property where
+		id =#{id}
+	</select>
+	<select id="queryAll" resultType="Property">
+		select * from Property order by
+		id
+	</select>
+	<select id="queryByPage" parameterType="map"
+		resultType="Property">
+		select * from Property order by id limit
+		#{start},#{pageSize}
+	</select>
+	<select id="getTotals" resultType="int">
+		select count(*) from Property
+	</select>
+</mapper>
